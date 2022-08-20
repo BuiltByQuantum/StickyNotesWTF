@@ -1154,7 +1154,7 @@ async function checkDownloadParam() {
     document.getElementById('sticky-info').innerHTML = `
     <p>Recipient: ${OwnerAddress}</p>
     ${replyButtonHtml}
-    ${burnLink}
+    
     `
     document.getElementById('sticky-info').style.display = "flex"
     // resolve ens
@@ -1176,7 +1176,7 @@ async function checkDownloadParam() {
       </a>
       </div>
       ${replyButtonHtml}
-      ${burnLink}
+   
       `
     }
   } catch (error) {
