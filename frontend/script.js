@@ -1227,7 +1227,12 @@ preview.addEventListener('change', (event) => {
 function searchToken() {
 
   var token= document.getElementById("search").value;
+  var url = "https://www.stickynotes.wtf/?note="+String(token);
+
   if(token){
-  window.location.href("https://stickynotes.wtf/?note="+token);
+    const link = document.createElement('a');
+    link.href=url
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
   }
-}
