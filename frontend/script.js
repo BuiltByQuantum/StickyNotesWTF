@@ -1248,5 +1248,11 @@ search.addEventListener("keydown", function (e) {
       }
     }
 });
+var address = document.getElementById("name")
+address.addEventListener("keydown", function (e) {
+  if(e.code === "Enter"){
+    onConnect()
+  }
+})
 
 
