@@ -1235,5 +1235,18 @@ function searchToken() {
     document.body.appendChild(link)
     link.click()
     link.remove()
+    return false
   }
 }
+
+var search = document.getElementById("search");
+search.addEventListener("keydown", function (e) {
+    if (e.code === "Enter") {
+      token = document.getElementById("search").value
+      if(token){
+        window.open("https://www.stickynotes.wtf/?note=" + token)
+      }
+    }
+});
+
+
