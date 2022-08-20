@@ -539,6 +539,11 @@ p#lockText {
     width: 432px;
     margin-top: 2rem;
     margin-bottom: 1rem;
+    @media (max-width: 500px){
+      & {
+        height: 365px;
+      }
+    }
   }
 
   #downloadFrame  {
@@ -597,7 +602,7 @@ p#lockText {
     color: #bbb;
   }
   
-  button[type="submit"] {
+  button[type="button"] {
     text-indent: -999px;
     overflow: hidden;
     width: 40px;
@@ -610,7 +615,7 @@ p#lockText {
     opacity: 0.7;
   }
   
-  button[type="submit"]:hover {
+  button[type="button"]:hover {
     opacity: 1;
   }
  
@@ -632,6 +637,11 @@ p#lockText {
     width: 100%;
     justify-content: space-between;
     margin-bottom: -1rem;
+    @media (max-width: 500px){
+     & {
+      max-width: 345px;
+     } 
+    }
 
   }
 
@@ -643,3 +653,8 @@ p#lockText {
   .burnLink{
     text-align:center;
   }
+
+  input[type=text], input[type=button], input[type=submit] {
+    -webkit-appearance: none;
+    -webkit-border-radius: 0;
+    }

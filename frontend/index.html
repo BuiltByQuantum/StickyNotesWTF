@@ -38,7 +38,7 @@
 <body>
   <nav><form>
     <input id="search" type="search" placeholder="Note #">
-    <button type="submit" onclick="searchToken()">Search</button>
+    <button type="button" onclick="searchToken()">Search</button>
   </form>
   <div id="editToggle" class="toggleWrapper">
     <input type="checkbox" name="preview" class="mobileToggle" id="toggle1">
@@ -50,6 +50,7 @@
 
   <h1 id="StickyTitle" class="center">Sticky Notes</h1>
   <p id="StickyDescription" class="center">Send on-chain notes to any ETH wallet.</p>
+  <div class="note-container">
   <div id="downloadFrame" style="display: none;"></div>
   <div id="previewFrame" style="display: none;"></div>
   <div id="noteBody" class="note">
@@ -67,6 +68,7 @@
     </div>
 
 </textarea>
+  </div>
   </div>
   <div id="tools" class="tools-container">
     <div class="colorpicker">
