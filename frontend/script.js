@@ -1115,10 +1115,17 @@ async function checkDownloadParam() {
       Reply
     </a>
     `
+    const burnLink = `
+    </a>
+      <a onclick="burnToken(${downloadTokenId})" target="_self" class="burnLink">
+      Burn
+    </a>
+    `
     document.getElementById('StickyTitle').innerText = "Loading..."
     document.getElementById('StickyDescription').innerText = ""
     document.getElementById("noteBody").style.display ="none";
     document.getElementById("tools").style.display ="none";
+    document.getElementsByTagName("nav")[0].style.display ="none";
     document.getElementById("downloadFrame").style.display ="block";
     const svg_base64 = await getSVG(Number(downloadTokenId))
     // console.log("svg_base64", svg_base64)
@@ -1147,6 +1154,7 @@ async function checkDownloadParam() {
     document.getElementById('sticky-info').innerHTML = `
     <p>Recipient: ${OwnerAddress}</p>
     ${replyButtonHtml}
+    ${burnLink}
     `
     document.getElementById('sticky-info').style.display = "flex"
     // resolve ens
@@ -1168,6 +1176,7 @@ async function checkDownloadParam() {
       </a>
       </div>
       ${replyButtonHtml}
+      ${burnLink}
       `
     }
   } catch (error) {
@@ -1214,3 +1223,11 @@ preview.addEventListener('change', (event) => {
     document.getElementById("previewToggle").innerText = "Preview"
   }
 })
+
+function searchToken() {
+
+  var token= document.getElementById("search").value;
+  if(token){
+  window.location.href("https://stickynotes.wtf/?note="+token);
+  }
+}

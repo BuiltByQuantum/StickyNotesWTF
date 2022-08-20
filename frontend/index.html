@@ -36,6 +36,18 @@
 </head>
 
 <body>
+  <nav><form>
+    <input id="search" type="search" placeholder="Token #">
+    <button type="submit" onclick="searchToken()">Token #</button>
+  </form>
+  <div id="editToggle" class="toggleWrapper">
+    <input type="checkbox" name="preview" class="mobileToggle" id="toggle1">
+    <label for="toggle1"></label>
+    <p id="previewToggle" class="toggleLabel">Preview</p>
+  </div>
+
+</nav>
+
   <h1 id="StickyTitle" class="center">Sticky Notes</h1>
   <p id="StickyDescription" class="center">Send on-chain notes to any ETH wallet.</p>
   <div id="downloadFrame" style="display: none;"></div>
@@ -51,7 +63,7 @@
       </div>
     </div>
     <div class="text-container">
-      <textarea maxlength="13000" id="noteText" name="noteText" placeholder="Your message"></textarea>
+      <textarea maxlength="915" id="noteText" name="noteText" placeholder="Your message"></textarea>
     </div>
 
 </textarea>
@@ -79,11 +91,7 @@
       Send note
     </div>
     <p class="price">.001Ξ + Gas</p>
-    <div class="toggleWrapper">
-      <input type="checkbox" name="preview" class="mobileToggle" id="toggle1">
-      <label for="toggle1"></label>
-      <p id="previewToggle" class="toggleLabel">Preview</p>
-    </div>
+   
   </div>
   <div id="sticky-info" class="tools-container" style="display: none;"></div>
 
