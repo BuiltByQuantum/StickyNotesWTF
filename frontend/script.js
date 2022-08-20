@@ -1236,3 +1236,4 @@ function searchToken() {
     link.click()
     link.remove()
   }
+}
