@@ -43,7 +43,7 @@ blockquote, q {
 
 blockquote:before, blockquote:after,
 q:before, q:after {
-  content: '';
+  content: "";
   content: none;
 }
 
@@ -53,10 +53,9 @@ table {
 }
 
 textarea,
-input[type="text"],
-input[type="button"],
-input[type="submit"] {
+input[type=text],
+input[type=button],
+input[type=submit] {
   -webkit-appearance: none;
   border-radius: 0;
-}
-/*# sourceMappingURL=reset.css.map */
+}/*# sourceMappingURL=reset.css.map */

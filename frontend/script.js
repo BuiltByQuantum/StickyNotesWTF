@@ -7,6 +7,10 @@ var web3;
 var toggle = false;
 var signer;
 var provider;
+const ALCHEMY = "nW-baLqO-05umB104pU9aoHIi6GF6Opk"
+const readOnlyProvider = ethers.providers.getDefaultProvider(1, {
+  alchemy: ALCHEMY,
+})
 const contractData = {
   addresses: {
     1: "0x41fE1792eE022493FD5475d27c8a79d3836ffa49",
@@ -868,6 +872,15 @@ async function refreshAccountData() {
  */
 async function onConnect() {
   try {
+    await connectWallet()
+    await mint();
+  } catch (errorT) {
+    error(errorT.message);
+  }
+}
+
+async function connectWallet() {
+  try {
     provider = await web3Modal.connect();
     await refreshAccountData();
     await web3.provider.request({
@@ -878,7 +891,6 @@ async function onConnect() {
         },
       ],
     });
-    await mint();
   } catch (errorT) {
     error(errorT.message);
   }
@@ -954,6 +966,66 @@ function error(text) {
   document.getElementById("error").innerHTML = text;
 }
 
+async function getSVG(tokenId) {
+  try {
+    const contract = new ethers.Contract(
+      contractData.addresses[TARGET_CHAIN_ID],
+      contractData.abi,
+      readOnlyProvider
+    );
+    const metadata_base64 = await contract.tokenURI(Number(tokenId))
+    if (!metadata_base64) {
+      throw new Error("no metadata found")
+    }
+    let metadata_str = atob(metadata_base64.replace(/^data:application\/(json);base64,/, ''));
+    const metadata = JSON.parse(metadata_str)
+    // console.log("metadata", metadata)
+    // const animation_url = metadata.animation_url.replace(/^data:image\/(svg\+xml);/, '')
+    const animation_url = metadata.animation_url
+    console.log("animation url", animation_url)
+    return animation_url
+  } catch (error) {
+    console.log(error)
+    error(error)
+  }
+}
+
+async function getSticky(tokenId) {
+  try {
+    const contract = new ethers.Contract(
+      contractData.addresses[TARGET_CHAIN_ID],
+      contractData.abi,
+      readOnlyProvider
+    );
+    const sticky_data = await contract.stickies(Number(tokenId))
+    return sticky_data
+  } catch (error) {
+    error(error)
+    return null
+  }
+}
+async function getOwner(tokenId) {
+  try {
+    const contract = new ethers.Contract(
+      contractData.addresses[TARGET_CHAIN_ID],
+      contractData.abi,
+      readOnlyProvider
+    );
+    const owner_address = await contract.ownerOf(Number(tokenId))
+    return owner_address
+  } catch (error) {
+    console.log(error)
+    error(error)
+    return null
+  }
+}
+
+async function getSender(tokenId) {
+  const sticky_data = await this.getSticky(tokenId)
+  console.log("creator", sticky_data?.creator)
+  return sticky_data?.creator
+}
+
 function previewSVG(color = selectedColor, isSBT = toggle) {
 
   try {
@@ -1005,7 +1077,110 @@ window.addEventListener("load", async () => {
   init();
   document.querySelector('input[name="color"]:checked').id = "yellow";
   document.getElementById("noteBody").style.background = "#fff8aa";
+  await checkReplyParam()
+  await checkDownloadParam()
 });
+
+async function checkReplyParam() {
+  try {
+    const queryString = window.location.search
+    const urlParams = new URLSearchParams(queryString);
+    const replyTokenId = urlParams.get('reply')
+    if (!replyTokenId) {
+      return
+    }
+    console.log("replyTokenId", replyTokenId)
+    const sender = await getSender(Number(replyTokenId))
+    if (sender) {
+      document.getElementById('name').value = sender
+      document.getElementById('noteText').placeholder = "Your reply"
+    }
+  } catch (error) {
+    error(error)
+  }
+}
+
+async function checkDownloadParam() {
+  try {
+    const queryString = window.location.search
+    const urlParams = new URLSearchParams(queryString);
+    const downloadTokenId = urlParams.get('note')
+    if (!downloadTokenId) {
+      return
+    }
+    console.log("downloadTokenId", downloadTokenId)
+    const replyButtonHtml = `
+    </a>
+      <a href="${window.location.origin}?reply=${downloadTokenId}" target="_self" class="button">
+      Reply
+    </a>
+    `
+    document.getElementById('StickyTitle').innerText = "Loading..."
+    document.getElementById('StickyDescription').innerText = ""
+    document.getElementById("noteBody").style.display ="none";
+    document.getElementById("tools").style.display ="none";
+    document.getElementById("downloadFrame").style.display ="block";
+    const svg_base64 = await getSVG(Number(downloadTokenId))
+    // console.log("svg_base64", svg_base64)
+    const svg = atob(svg_base64.replace(/^data:image\/(svg\+xml);base64,/, ''));
+    // console.log("svg", svg)
+    const StickyData = await getSticky(Number(downloadTokenId))
+    const creatorAddress = StickyData?.creator
+    const OwnerAddress = await getOwner(Number(downloadTokenId))
+    const stickyTitle = StickyData?.title || "StickyNote #" + downloadTokenId
+    // document.getElementById("downloadFrame").innerHTML = svg
+    document.getElementById("downloadFrame").innerHTML = `
+    <a download="${stickyTitle}.svg" href="${svg_base64}" title="${stickyTitle}" class="downloader">
+    ${svg}
+    </a>
+    `
+    // rerun svg script
+    Array.from(document.querySelector('#downloadFrame>a>svg').querySelectorAll("script")).forEach((script) => {
+      try {
+        const replacement_script = document.createElement('script')
+        replacement_script.appendChild(document.createTextNode(script.innerHTML))
+        script.parentNode.replaceChild(replacement_script, script)
+      } catch {}
+    })
+    document.getElementById('StickyTitle').innerText = stickyTitle
+    document.getElementById('StickyDescription').innerText = `Sender: ${creatorAddress}`
+    document.getElementById('sticky-info').innerHTML = `
+    <p>Recipient: ${OwnerAddress}</p>
+    ${replyButtonHtml}
+    `
+    document.getElementById('sticky-info').style.display = "flex"
+    // resolve ens
+    const displayCreatorAddress = await resolveEns(creatorAddress)
+    if (displayCreatorAddress.display_name) {
+      document.getElementById('StickyDescription').innerHTML = `
+      Sender:
+      <a href="https://etherscan.io/address/${displayCreatorAddress.address}" target="_blank">
+      <p style="display: inline;">${displayCreatorAddress.display_name}</p>
+      `
+    }
+    const displayOwnerAddress = await resolveEns(OwnerAddress)
+    if (displayOwnerAddress.display_name) {
+      document.getElementById('sticky-info').innerHTML = `
+      <div>
+      Recipient: 
+      <a href="https://etherscan.io/address/${displayOwnerAddress.address}" target="_blank">
+      <p style="display: inline;">${displayOwnerAddress.display_name}</p>
+      </a>
+      </div>
+      ${replyButtonHtml}
+      `
+    }
+  } catch (error) {
+    console.log(error)
+    error(error)
+  }
+}
+
+async function resolveEns(address) {
+  const endpoint_url = `https://ens.quantum.tech/${address}`
+  const response = await fetch(endpoint_url).then((response) => response.json())
+  return response
+}
 
 function pickColor() {
   var checkRadio = document.querySelector('input[name="color"]:checked').id;

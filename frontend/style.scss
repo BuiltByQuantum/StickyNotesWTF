@@ -15,7 +15,7 @@ body{
     display: flex;
     justify-content: center;
     flex-direction: column;
-    // align-items: center;
+    align-items: center;
     padding: 1rem;
 
 }
@@ -99,6 +99,7 @@ display: flex;
 justify-content: center;
 flex-direction: column;
 align-self: center;
+align-items: stretch;
 &__top{
     display: flex;
     height: 50px;
@@ -130,16 +131,24 @@ align-self: center;
        zoom: .8;
     }
 }
-textarea{
-    height: 100%;
-    width: auto;
-    resize: none;
-    border: none;
-    background:rgba(255, 255, 255, 0.25);
-    padding: 1rem;
-    outline: none;
-    font-size: 14px;
-    line-height: 1.2rem;
+.text-container {
+  width: 100%;
+  height: 100%;
+  textarea{
+      height: 100%;
+      width: 100%;
+      max-width: 100%;
+      resize: none;
+      border: none;
+      background:rgba(255, 255, 255, 0.25);
+      padding: 1rem;
+      outline: none;
+      font-size: 14px;
+      line-height: 1.2rem;
+      -webkit-box-sizing: border-box;
+       -moz-box-sizing: border-box;
+            box-sizing: border-box;
+  }
 }
 
 .price{
@@ -229,6 +238,18 @@ $colors: (
   purple: #d2aaff,
 );
 
+.tools-container {
+  width: 100%;
+  display: flex;
+  gap: 1rem;
+  align-items: stretch;
+  justify-content: center;
+  flex-direction: column;
+  div {
+    text-align: center;
+  }
+}
+
 
 
 input[type="radio"] {
@@ -269,6 +290,7 @@ label {
 
 .colorpicker{
     align-self: center;
+    z-index: 10;
 }
 
 hr{
@@ -523,3 +545,37 @@ p#lockText {
     margin-left: -0.5rem;
   }
   
+  #previewFrame  {
+    height: 432px;
+    width: 432px;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+  }
+
+  #downloadFrame  {
+    height: 432px;
+    width: 432px;
+    margin-top: 2rem;
+    margin-bottom: 1rem;
+    img {
+      width: 100%;
+    }
+    svg {
+      height: 432px;
+      width: 432px;
+    }
+    .downloader {
+      color: inherit;
+      text-decoration: none;
+    }
+  }
+
+  #NFT > g:nth-child(2) {
+    // zoom: 1.2;
+  }
+
+  #previewFrame svg {
+    height: 100%;
+    width: 100%;
+    transform: scale(1.1);
+  }

@@ -36,8 +36,9 @@
 </head>
 
 <body>
-  <h1 class="center">Sticky Notes</h1>
-  <p class="center">Send on-chain notes to any ETH wallet.</p>
+  <h1 id="StickyTitle" class="center">Sticky Notes</h1>
+  <p id="StickyDescription" class="center">Send on-chain notes to any ETH wallet.</p>
+  <div id="downloadFrame" style="display: none;"></div>
   <div id="previewFrame" style="display: none;"></div>
   <div id="noteBody" class="note">
     <div class="note__top">
@@ -55,33 +56,36 @@
 
 </textarea>
   </div>
-  <div class="colorpicker">
-    <input onclick="pickColor()" type="radio" name="color" id="yellow" checked="checked" />
-    <label for="yellow"><span class="yellow"></span></label>
-
-    <input onclick="pickColor()" type="radio" name="color" id="green" />
-    <label for="green"><span class="green"></span></label>
-
-    <input onclick="pickColor()" type="radio" name="color" id="orange" />
-    <label for="orange"><span class="orange"></span></label>
-
-    <input onclick="pickColor()" type="radio" name="color" id="blue" />
-    <label for="blue"><span class="blue"></span></label>
-
-    <input onclick="pickColor()" type="radio" name="color" id="purple" />
-    <label for="purple"><span class="purple"></span></label>
+  <div id="tools" class="tools-container">
+    <div class="colorpicker">
+      <input onclick="pickColor()" type="radio" name="color" id="yellow" checked="checked" />
+      <label for="yellow"><span class="yellow"></span></label>
+  
+      <input onclick="pickColor()" type="radio" name="color" id="green" />
+      <label for="green"><span class="green"></span></label>
+  
+      <input onclick="pickColor()" type="radio" name="color" id="orange" />
+      <label for="orange"><span class="orange"></span></label>
+  
+      <input onclick="pickColor()" type="radio" name="color" id="blue" />
+      <label for="blue"><span class="blue"></span></label>
+  
+      <input onclick="pickColor()" type="radio" name="color" id="purple" />
+      <label for="purple"><span class="purple"></span></label>
+    </div>
+  
+    <input placeholder="Recipient's address" type="text" id="name" name="name" required />
+    <div href="" id="sendNote" onclick="onConnect()" class="button">
+      Send note
+    </div>
+    <p class="price">.001Ξ + Gas</p>
+    <div class="toggleWrapper">
+      <input type="checkbox" name="preview" class="mobileToggle" id="toggle1">
+      <label for="toggle1"></label>
+      <p id="previewToggle" class="toggleLabel">Preview</p>
+    </div>
   </div>
-
-  <input placeholder="Recipient's address" type="text" id="name" name="name" required />
-  <div href="" id="sendNote" onclick="onConnect()" class="button">
-    Send note
-  </div>
-  <p class="price">.001Ξ + Gas</p>
-  <div class="toggleWrapper">
-    <input type="checkbox" name="preview" class="mobileToggle" id="toggle1">
-    <label for="toggle1"></label>
-    <p id="previewToggle" class="toggleLabel">Preview</p>
-  </div>
+  <div id="sticky-info" class="tools-container" style="display: none;"></div>
 
   <p id="error" class="error" style="display: none">ERROR</p>
   <footer>
