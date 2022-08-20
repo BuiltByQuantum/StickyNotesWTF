@@ -613,13 +613,7 @@ p#lockText {
   button[type="submit"]:hover {
     opacity: 1;
   }
-  
-  button[type="submit"]:focus,
-  input[type="search"]:focus {
-    box-shadow: 0 0 3px 0 #1183d6;
-    border-color: #1183d6;
-    outline: none;
-  }
+ 
   
   form.nosubmit {
    border: none;
